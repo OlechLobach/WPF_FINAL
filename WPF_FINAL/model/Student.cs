@@ -41,13 +41,13 @@ namespace WPF_FINAL.Models
             }
         }
 
-        public ObservableCollection<int> Grades // Властивість для оцінок
+        public ObservableCollection<int> Grades
         {
             get => grades ??= new ObservableCollection<int>();
             set
             {
                 grades = value;
-                OnPropertyChanged(nameof(Grades));
+                OnPropertyChanged(nameof(Grades)); // Сповіщення про зміну
             }
         }
 

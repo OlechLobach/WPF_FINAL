@@ -54,8 +54,7 @@
                     materialDesign:HintAssist.Hint="Вік" Margin="0 8" Background="#303030" Foreground="White" />
                 <TextBox Text="{Binding SelectedStudent.Grade}" 
                     materialDesign:HintAssist.Hint="Клас" Margin="0 8" Background="#303030" Foreground="White" />
-
-                <TextBox Text="{Binding SelectedStudent.Grades, Converter={StaticResource GradesConverter}}" 
+                <TextBox Text="{Binding SelectedStudent.Grades, Converter={StaticResource GradesConverter}}"
     materialDesign:HintAssist.Hint="Оцінки" Margin="0 8" Background="#303030" Foreground="White" />
                 <!-- Кнопки для додавання, збереження та видалення -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="16 0 0 0">
