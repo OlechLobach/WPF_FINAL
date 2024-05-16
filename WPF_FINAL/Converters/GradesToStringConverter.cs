@@ -1,49 +1,32 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Data;
 
-namespace WPF_FINAL.Converters
+namespace WPF_FINAL
 {
     public class GradesToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IEnumerable<int> grades)
+            var grades = value as ObservableCollection<int>;
+            if (grades != null)
             {
-                return string.Join(", ", grades); // Об'єднує колекцію чисел у рядок
+                return string.Join(", ", grades);
             }
-            return string.Empty; // Якщо колекція порожня
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            try
+            var gradesString = value as string;
+            if (gradesString != null)
             {
-                if (value is string text)
-                {
-                    var grades = new List<int>();
-                    var parts = text.Split(',');
-
-                    foreach (var part in parts)
-                    {
-                        if (int.TryParse(part.Trim(), out int result))
-                        {
-                            grades.Add(result);
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Could not convert '{part}' to a number.");
-                            return new List<int>(); // Повертає порожній список у разі помилки
-                        }
-                    }
-                    return grades; // Повертає список чисел
-                }
+                var grades = gradesString.Split(new[] { ", " }, StringSplitOptions.None);
+                return new ObservableCollection<int>(Array.ConvertAll(grades, int.Parse));
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Conversion error: {ex.Message}"); // Обробка винятка
-            }
-
-            return new List<int>(); // Повертає порожній список у разі помилки
+            return new ObservableCollection<int>();
         }
     }
 }

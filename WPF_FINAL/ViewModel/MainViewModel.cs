@@ -3,9 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Xml.Linq;
 using WPF_FINAL.Commands;
 using WPF_FINAL.Models;
 
@@ -14,7 +12,8 @@ namespace WPF_FINAL.ViewModel
     public class MainViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Student> Students { get; set; } = new ObservableCollection<Student>();
-        public Student? SelectedStudent { get; set; } // Вибраний студент
+        public Student? SelectedStudent { get; set; }
+        public Student NewStudent { get; set; } = new Student();
 
         public ICommand AddStudentCommand { get; set; }
         public ICommand SaveStudentsCommand { get; set; }
@@ -22,24 +21,26 @@ namespace WPF_FINAL.ViewModel
 
         public MainViewModel()
         {
-            // Команди
-            AddStudentCommand = new RelayCommand(p => AddStudent(p));
+            AddStudentCommand = new RelayCommand(p => AddStudent());
             SaveStudentsCommand = new RelayCommand(p => SaveStudents());
             DeleteStudentCommand = new RelayCommand(p => DeleteStudent(p));
 
-            LoadStudentsFromFile(); // Завантаження даних із файлу при ініціалізації
+            LoadStudentsFromFile();
         }
 
-        // Додати нового студента
-        private void AddStudent(object? parameter)
+        private void AddStudent()
         {
-            var newStudent = new Student { Name = "Новий Учень", Age = 0, Grade = 0 };
-            Students.Add(newStudent);
-            SelectedStudent = newStudent;
-            OnPropertyChanged(nameof(SelectedStudent)); // Повідомити про зміну
+            Students.Add(new Student
+            {
+                Name = NewStudent.Name,
+                Age = NewStudent.Age,
+                Grade = NewStudent.Grade,
+                GradeValue = NewStudent.GradeValue
+            });
+            NewStudent = new Student();
+            OnPropertyChanged(nameof(NewStudent));
         }
 
-        // Видалити вибраного студента
         private void DeleteStudent(object? parameter)
         {
             if (SelectedStudent != null)
@@ -50,7 +51,6 @@ namespace WPF_FINAL.ViewModel
             }
         }
 
-        // Збереження студентів у файл
         private void SaveStudents()
         {
             try
@@ -64,7 +64,6 @@ namespace WPF_FINAL.ViewModel
             }
         }
 
-        // Завантаження студентів із файлу
         private void LoadStudentsFromFile()
         {
             try
@@ -76,10 +75,10 @@ namespace WPF_FINAL.ViewModel
 
                     if (loadedStudents != null)
                     {
-                        Students.Clear(); // Очистити існуючий список
+                        Students.Clear();
                         foreach (var student in loadedStudents)
                         {
-                            Students.Add(student); // Додати завантажених студентів
+                            Students.Add(student);
                         }
                     }
                 }
