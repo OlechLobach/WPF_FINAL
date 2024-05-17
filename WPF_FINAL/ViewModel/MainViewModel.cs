@@ -96,4 +96,4 @@ namespace WPF_FINAL.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-}
+} 
